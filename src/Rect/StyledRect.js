@@ -4,6 +4,8 @@ export default styled.div`
   position: absolute;
   border: 1px solid #eb5648;
 
+  touch-action: none;
+
   .square {
     position: absolute;
     width: 7px;

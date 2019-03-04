@@ -1,10 +1,10 @@
 {
-  "name": "react-resizable-rotatable-draggable",
+  "name": "react-resizable-rotatable-draggable-touch",
   "version": "0.3.0-dev.0",
-  "description": "A rectangle react component which can be resized and rotated",
-  "author": "MockingBot",
+  "description": "A rectangle react component which can be resized and rotated. Works on touch",
+  "author": "Rinos",
   "license": "MIT",
-  "repository": "github:mockingbot/react-resizable-rotatable-draggable",
+  "repository": "github:rinose/react-resizable-rotatable-draggable",
   "keywords": [
     "react",
     "rectangle",
