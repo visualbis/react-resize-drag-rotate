@@ -27,7 +27,11 @@ export default class ResizableRect extends Component {
     onResizeEnd: PropTypes.func,
     onDragStart: PropTypes.func,
     onDrag: PropTypes.func,
-    onDragEnd: PropTypes.func
+    onDragEnd: PropTypes.func,
+    onClick: PropTypes.func,
+    onDoubleClick: PropTypes.func,
+    className: PropTypes.string,
+    color: PropTypes.string
   }
 
   static defaultProps = {
@@ -36,7 +40,9 @@ export default class ResizableRect extends Component {
     rotatable: true,
     zoomable: '',
     minWidth: 10,
-    minHeight: 10
+    minHeight: 10,
+    className: '',
+    color: '#333'
   }
 
   handleRotate = (angle, startAngle) => {
@@ -81,13 +87,15 @@ export default class ResizableRect extends Component {
   render () {
     const {
       top, left, width, height, rotateAngle, parentRotateAngle, zoomable, rotatable,
-      onRotate, onResizeStart, onResizeEnd, onRotateStart, onRotateEnd, onDragStart, onDragEnd
+      onRotate, onResizeStart, onResizeEnd, onRotateStart, onRotateEnd, onDragStart, onDragEnd,
+      className, onClick, onDoubleClick
     } = this.props
 
     const styles = tLToCenter({ top, left, width, height, rotateAngle })
 
     return (
       <Rect
+        className={className}
         styles={styles}
         zoomable={zoomable}
         rotatable={Boolean(rotatable && onRotate)}
@@ -104,6 +112,9 @@ export default class ResizableRect extends Component {
         onDragStart={onDragStart}
         onDrag={this.handleDrag}
         onDragEnd={onDragEnd}
+
+        onClick={onClick}
+        onDoubleClick={onDoubleClick}
       />
     )
   }

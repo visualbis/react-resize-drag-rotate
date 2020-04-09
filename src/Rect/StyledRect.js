@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export default styled.div`
   position: absolute;
-  border: 1px solid #eb5648;
+  border: 1px solid ${props => props.color};
 
   touch-action: none;
 
@@ -11,7 +11,7 @@ export default styled.div`
     width: 7px;
     height: 7px;
     background: white;
-    border: 1px solid #eb5648;
+    border: 1px solid ${props => props.color};
     border-radius: 1px;
   }
 

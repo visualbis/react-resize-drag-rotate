@@ -35,9 +35,9 @@ class App extends PureComponent {
     })
   }
 
-  handleRotateEnd = () => console.log('RotateEnd')
+  handleRotateEnd = (e) => console.log('RotateEnd', e)
 
-  handleRotateStart = () => console.log('RotateStart')
+  handleRotateStart = (e) => console.log('RotateStart', e)
 
   render () {
     const { top, left, width, height, rotateAngle } = this.state

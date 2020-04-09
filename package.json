@@ -1,6 +1,6 @@
 {
-  "name": "react-resizable-rotatable-draggable-touch",
-  "version": "0.3.0-dev.0",
+  "name": "react-resizable-rotatable-draggable-touch-v2",
+  "version": "2.0.0",
   "description": "A rectangle react component which can be resized and rotated. Works on touch",
   "author": "Rinos",
   "license": "MIT",
@@ -39,6 +39,8 @@
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "babel-plugin-styled-components": "^1.10.0",
+    "browserslist": "^4.11.1",
+    "caniuse-lite": "^1.0.30001040",
     "cross-env": "^5.2.0",
     "eslint": "^5.12.0",
     "eslint-config-standard": "^12.0.0",
@@ -60,5 +62,6 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {}
 }

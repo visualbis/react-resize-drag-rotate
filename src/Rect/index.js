@@ -28,7 +28,11 @@ export default class Rect extends PureComponent {
     onDragStart: PropTypes.func,
     onDrag: PropTypes.func,
     onDragEnd: PropTypes.func,
-    parentRotateAngle: PropTypes.number
+    parentRotateAngle: PropTypes.number,
+    onClick: PropTypes.func,
+    onDoubleClick: PropTypes.func,
+    className: PropTypes.string,
+    color: PropTypes.string
   }
 
   setElementRef = (ref) => { this.$element = ref }
@@ -36,7 +40,7 @@ export default class Rect extends PureComponent {
   // Drag
   startDrag = (e) => {
     let { clientX: startX, clientY: startY } = e.touches ? e.touches[0] : e
-    this.props.onDragStart && this.props.onDragStart()
+    this.props.onDragStart && this.props.onDragStart(e)
     this._isMouseDown = true
     const onMove = (e) => {
       e.preventDefault()
@@ -45,18 +49,18 @@ export default class Rect extends PureComponent {
       const { clientX, clientY } = e.touches ? e.touches[0] : e
       const deltaX = clientX - startX
       const deltaY = clientY - startY
-      this.props.onDrag(deltaX, deltaY)
+      this.props.onDrag(deltaX, deltaY, e)
       startX = clientX
       startY = clientY
     }
-    const onUp = () => {
+    const onUp = (e) => {
       document.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseup', onUp)
       document.removeEventListener('touchmove', onMove)
       document.removeEventListener('touchend', onUp)
       if (!this._isMouseDown) return
       this._isMouseDown = false
-      this.props.onDragEnd && this.props.onDragEnd()
+      this.props.onDragEnd && this.props.onDragEnd(e)
     }
     document.addEventListener('mousemove', onMove)
     document.addEventListener('mouseup', onUp)
@@ -78,7 +82,7 @@ export default class Rect extends PureComponent {
       x: clientX - center.x,
       y: clientY - center.y
     }
-    this.props.onRotateStart && this.props.onRotateStart()
+    this.props.onRotateStart && this.props.onRotateStart(e)
     this._isMouseDown = true
     const onMove = (e) => {
       if (!this._isMouseDown) return // patch: fix windows press win key during mouseup issue
@@ -89,16 +93,16 @@ export default class Rect extends PureComponent {
         y: clientY - center.y
       }
       const angle = getAngle(startVector, rotateVector)
-      this.props.onRotate(angle, startAngle)
+      this.props.onRotate(angle, startAngle, e)
     }
-    const onUp = () => {
+    const onUp = (e) => {
       document.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseup', onUp)
       document.removeEventListener('touchmove', onMove)
       document.removeEventListener('touchend', onUp)
       if (!this._isMouseDown) return
       this._isMouseDown = false
-      this.props.onRotateEnd && this.props.onRotateEnd()
+      this.props.onRotateEnd && this.props.onRotateEnd(e)
     }
     document.addEventListener('mousemove', onMove)
     document.addEventListener('mouseup', onUp)
@@ -114,7 +118,7 @@ export default class Rect extends PureComponent {
     const { clientX: startX, clientY: startY } = e.touches ? e.touches[0] : e
     const rect = { width, height, centerX, centerY, rotateAngle }
     const type = e.target.getAttribute('class').split(' ')[ 0 ]
-    this.props.onResizeStart && this.props.onResizeStart()
+    this.props.onResizeStart && this.props.onResizeStart(e)
     this._isMouseDown = true
     const onMove = (e) => {
       if (!this._isMouseDown) return // patch: fix windows press win key during mouseup issue
@@ -125,10 +129,10 @@ export default class Rect extends PureComponent {
       const alpha = Math.atan2(deltaY, deltaX)
       const deltaL = getLength(deltaX, deltaY)
       const isShiftKey = e.shiftKey
-      this.props.onResize(deltaL, alpha, rect, type, isShiftKey)
+      this.props.onResize(deltaL, alpha, rect, type, isShiftKey, e)
     }
 
-    const onUp = () => {
+    const onUp = (e) => {
       document.body.style.cursor = 'auto'
       document.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseup', onUp)
@@ -136,7 +140,7 @@ export default class Rect extends PureComponent {
       document.removeEventListener('touchend', onUp)
       if (!this._isMouseDown) return
       this._isMouseDown = false
-      this.props.onResizeEnd && this.props.onResizeEnd()
+      this.props.onResizeEnd && this.props.onResizeEnd(e)
     }
     document.addEventListener('mousemove', onMove)
     document.addEventListener('mouseup', onUp)
@@ -153,7 +157,11 @@ export default class Rect extends PureComponent {
       },
       zoomable,
       rotatable,
-      parentRotateAngle
+      parentRotateAngle,
+      onClick,
+      onDoubleClick,
+      className,
+      color
     } = this.props
     const style = {
       width: Math.abs(width),
@@ -169,8 +177,10 @@ export default class Rect extends PureComponent {
         ref={this.setElementRef}
         onMouseDown={this.startDrag}
         onTouchStart={this.startDrag}
-        className="rect single-resizer"
+        className={`rect single-resizer ${className || ''}`}
         style={style}
+        onClick={onClick}
+        onDoubleClick={onDoubleClick}
       >
         {
           rotatable &&
@@ -178,7 +188,7 @@ export default class Rect extends PureComponent {
             <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M10.536 3.464A5 5 0 1 0 11 10l1.424 1.425a7 7 0 1 1-.475-9.374L13.659.34A.2.2 0 0 1 14 .483V5.5a.5.5 0 0 1-.5.5H8.483a.2.2 0 0 1-.142-.341l2.195-2.195z"
-                fill="#eb5648"
+                fill={color}
                 fillRule="nonzero"
               />
             </svg>
