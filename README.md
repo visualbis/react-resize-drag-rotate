@@ -1,13 +1,15 @@
-# React-resizable-rotatable-draggable-rectangle
+# react-resizable-rotatable-draggable-touch-v2
 
-[![NPM](https://img.shields.io/npm/v/react-resizable-rotatable-draggable.svg)](https://www.npmjs.com/package/react-resizable-rotatable-draggable) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/react-resizable-rotatable-draggable-touch-v2.svg)](https://www.npmjs.com/package/react-resizable-rotatable-draggable-touch-v2) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-A react widget that can be resized and rotated via a handler.
+A react widget that can be dragged, resized and rotated via a handler.
+
+This is a fork of [react-resizable-rotatable-draggable-touch](https://www.npmjs.com/package/react-resizable-rotatable-draggable-touch) which is a fork of [react-resizable-rotatable-draggable](https://www.npmjs.com/package/react-resizable-rotatable-draggable), with a few improvements and extra props.
 
 ### Installation
 
 ```bash
-npm install --save react-resizable-rotatable-draggable`
+npm install --save react-resizable-rotatable-draggable-touch-v2`
 ```
 
 Then you will need to install peer dependency
@@ -20,7 +22,7 @@ npm install --save styled-components
 
 ```jsx
 import React, { Component } from 'react'
-import ResizableRect from 'react-resizable-rotatable-draggable'
+import ResizableRect from 'react-resizable-rotatable-draggable-touch-v2'
 
 class App extends Component {
   constructor() {
@@ -34,29 +36,23 @@ class App extends Component {
     }
   }
 
-  handleResize = (style, isShiftKey, type) => {
-    // type is a string and it shows which resize-handler you clicked
-    // e.g. if you clicked top-right handler, then type is 'tr'
-    let { top, left, width, height } = style
-    top = Math.round(top)
-    left = Math.round(left)
-    width = Math.round(width)
-    height = Math.round(height)
+  handleResize = ({ style: { top, left, width, height }, isShiftKey, type, event }) => {
+    console.log('resize', top, left, width, height, event)
     this.setState({
-      top,
-      left,
-      width,
-      height
+      top: Math.round(top),
+      left: Math.round(left),
+      width: Math.round(width),
+      height: Math.round(height)
     })
   }
 
-  handleRotate = (rotateAngle) => {
-    this.setState({
-      rotateAngle
-    })
+  handleRotate = ({ rotateAngle, event }) => {
+    console.log('rotate', rotateAngle, event)
+    this.setState({ rotateAngle })
   }
 
-  handleDrag = (deltaX, deltaY) => {
+  handleDrag = ({ deltaX, deltaY, event }) => {
+    console.log('drag', deltaX, deltaY, event)
     this.setState({
       left: this.state.left + deltaX,
       top: this.state.top + deltaY
@@ -87,7 +83,8 @@ class App extends Component {
           // onDragStart={this.handleDragStart}
           onDrag={this.handleDrag}
           // onDragEnd={this.handleDragEnd}
-        />
+          color="#6963da"
+        >Hello world</ResizableRect>
       </div>
     )
   }
@@ -119,7 +116,13 @@ export default App
 |onDragStart  | func                    |         |                                       |
 |onDrag       | func                    |         | (deltaX, deltaY)                      |
 |onDragEnd    | func                    |         |                                       |
+|onClick      | func                    |         |                                       |
+|onDoubleClick| func                    |         |                                       |
+|className    | string                  | ''      |                                       |
+|color        | string                  | #333    |                                       |
 
 ## License
 
 MIT © [MockingBot](https://github.com/mockingbot)
+[rinose](https://github.com/rinose)
+[Vlad-x](https://github.com/vlad-x)

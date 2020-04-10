@@ -49,7 +49,7 @@ export default class Rect extends PureComponent {
       const { clientX, clientY } = e.touches ? e.touches[0] : e
       const deltaX = clientX - startX
       const deltaY = clientY - startY
-      this.props.onDrag(deltaX, deltaY, e)
+      this.props.onDrag({ deltaX, deltaY, event: e })
       startX = clientX
       startY = clientY
     }
@@ -93,7 +93,7 @@ export default class Rect extends PureComponent {
         y: clientY - center.y
       }
       const angle = getAngle(startVector, rotateVector)
-      this.props.onRotate(angle, startAngle, e)
+      this.props.onRotate({ angle, startAngle, event: e })
     }
     const onUp = (e) => {
       document.removeEventListener('mousemove', onMove)
@@ -129,7 +129,7 @@ export default class Rect extends PureComponent {
       const alpha = Math.atan2(deltaY, deltaX)
       const deltaL = getLength(deltaX, deltaY)
       const isShiftKey = e.shiftKey
-      this.props.onResize(deltaL, alpha, rect, type, isShiftKey, e)
+      this.props.onResize({ deltaL, alpha, rect, type, isShiftKey, event: e })
     }
 
     const onUp = (e) => {
@@ -161,7 +161,8 @@ export default class Rect extends PureComponent {
       onClick,
       onDoubleClick,
       className,
-      color
+      color,
+      children
     } = this.props
     const style = {
       width: Math.abs(width),
@@ -174,6 +175,7 @@ export default class Rect extends PureComponent {
 
     return (
       <StyledRect
+        color={color}
         ref={this.setElementRef}
         onMouseDown={this.startDrag}
         onTouchStart={this.startDrag}
@@ -182,6 +184,7 @@ export default class Rect extends PureComponent {
         onClick={onClick}
         onDoubleClick={onDoubleClick}
       >
+        { children }
         {
           rotatable &&
           <div className="rotate" onMouseDown={this.startRotate} onTouchStart={this.startRotate}>

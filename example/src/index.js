@@ -15,7 +15,8 @@ class App extends PureComponent {
     }
   }
 
-  handleResize = ({ top, left, width, height }, isShiftKey, type) => {
+  handleResize = ({ style: { top, left, width, height }, isShiftKey, type, event }) => {
+    console.log('resize', top, left, width, height, event)
     this.setState({
       top: Math.round(top),
       left: Math.round(left),
@@ -24,11 +25,13 @@ class App extends PureComponent {
     })
   }
 
-  handleRotate = (rotateAngle) => {
+  handleRotate = ({ rotateAngle, event }) => {
+    console.log('rotate', rotateAngle, event)
     this.setState({ rotateAngle })
   }
 
-  handleDrag = (deltaX, deltaY) => {
+  handleDrag = ({ deltaX, deltaY, event }) => {
+    console.log('drag', deltaX, deltaY, event)
     this.setState({
       left: this.state.left + deltaX,
       top: this.state.top + deltaY
@@ -41,7 +44,7 @@ class App extends PureComponent {
 
   render () {
     const { top, left, width, height, rotateAngle } = this.state
-    return <ResizableRect {...{
+    return <ResizableRect color="#6963da" {...{
       top,
       left,
       width,
@@ -61,7 +64,7 @@ class App extends PureComponent {
       // onDragStart: this.handleDragStart,
       onDrag: this.handleDrag
       // onDragEnd: this.handleDragEnd,
-    }} />
+    }} >Hello world</ResizableRect>
   }
 }
 

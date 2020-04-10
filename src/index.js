@@ -45,7 +45,7 @@ export default class ResizableRect extends Component {
     color: '#333'
   }
 
-  handleRotate = (angle, startAngle) => {
+  handleRotate = ({ angle, startAngle, event }) => {
     if (!this.props.onRotate) return
     let rotateAngle = Math.round(startAngle + angle)
     if (rotateAngle >= 360) {
@@ -62,33 +62,34 @@ export default class ResizableRect extends Component {
     } else if (rotateAngle > 266 && rotateAngle < 274) {
       rotateAngle = 270
     }
-    this.props.onRotate(rotateAngle)
+    this.props.onRotate({ rotateAngle, event })
   }
 
-  handleResize = (length, alpha, rect, type, isShiftKey) => {
+  handleResize = ({ deltaL, alpha, rect, type, isShiftKey, event }) => {
     if (!this.props.onResize) return
     const { rotateAngle, aspectRatio, minWidth, minHeight, parentRotateAngle } = this.props
     const beta = alpha - degToRadian(rotateAngle + parentRotateAngle)
-    const deltaW = length * Math.cos(beta)
-    const deltaH = length * Math.sin(beta)
+    const deltaW = deltaL * Math.cos(beta)
+    const deltaH = deltaL * Math.sin(beta)
     const ratio = isShiftKey && !aspectRatio ? rect.width / rect.height : aspectRatio
     const {
       position: { centerX, centerY },
       size: { width, height }
     } = getNewStyle(type, { ...rect, rotateAngle }, deltaW, deltaH, ratio, minWidth, minHeight)
 
-    this.props.onResize(centerToTL({ centerX, centerY, width, height, rotateAngle }), isShiftKey, type)
+    const style = centerToTL({ centerX, centerY, width, height, rotateAngle })
+    this.props.onResize({ style, isShiftKey, type, event })
   }
 
-  handleDrag = (deltaX, deltaY) => {
-    this.props.onDrag && this.props.onDrag(deltaX, deltaY)
+  handleDrag = (params) => {
+    this.props.onDrag && this.props.onDrag(params)
   }
 
   render () {
     const {
       top, left, width, height, rotateAngle, parentRotateAngle, zoomable, rotatable,
       onRotate, onResizeStart, onResizeEnd, onRotateStart, onRotateEnd, onDragStart, onDragEnd,
-      className, onClick, onDoubleClick
+      className, onClick, onDoubleClick, color, children
     } = this.props
 
     const styles = tLToCenter({ top, left, width, height, rotateAngle })
@@ -115,6 +116,9 @@ export default class ResizableRect extends Component {
 
         onClick={onClick}
         onDoubleClick={onDoubleClick}
+
+        color={color}
+        children={children}
       />
     )
   }
