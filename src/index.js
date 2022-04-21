@@ -119,6 +119,8 @@ export default class ResizableRect extends Component {
 
         color={color}
         children={children}
+        top={top}
+        left={left}
       />
     )
   }

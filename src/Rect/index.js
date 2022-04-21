@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
-import { getLength, getAngle, getCursor } from '../utils'
+import ReactDom from 'react-dom'
+import { getLength, getAngle, getCursor, getBoundPosition } from '../utils'
 import StyledRect from './StyledRect'
 
 const zoomableMap = {
@@ -46,12 +47,17 @@ export default class Rect extends PureComponent {
       e.preventDefault()
       if (!this._isMouseDown) return // patch: fix windows press win key during mouseup issue
       e.stopImmediatePropagation()
-      const { clientX, clientY } = e.touches ? e.touches[0] : e
-      const deltaX = clientX - startX
-      const deltaY = clientY - startY
-      this.props.onDrag({ deltaX, deltaY, event: e })
-      startX = clientX
-      startY = clientY
+      const { top, left } = this.props;
+      const { clientX, clientY } = e.touches ? e.touches[0] : e;
+      const distanceX = startX - left;
+      const distanceY = startY - top;
+      const [x,y] = getBoundPosition( ".annotatation-wrapper", clientX, clientY, distanceX, distanceY );
+      console.log(x,y, startX, startY)
+      const deltaX = x - startX
+      const deltaY = y - startY
+      this.props.onDrag({ deltaX, deltaY, x, y, event: e })
+      startX = x
+      startY = y
     }
     const onUp = (e) => {
       document.removeEventListener('mousemove', onMove)
@@ -184,7 +190,7 @@ export default class Rect extends PureComponent {
         onClick={onClick}
         onDoubleClick={onDoubleClick}
       >
-        { children }
+        { children}
         {
           rotatable &&
           <div className="rotate" onMouseDown={this.startRotate} onTouchStart={this.startRotate}>
