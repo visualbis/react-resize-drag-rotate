@@ -15,6 +15,8 @@ export default class ResizableRect extends Component {
     zoomable: PropTypes.string,
     minWidth: PropTypes.number,
     minHeight: PropTypes.number,
+    maxWidth: PropTypes.number,
+    maxHeight: PropTypes.number,
     aspectRatio: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.bool
@@ -31,7 +33,9 @@ export default class ResizableRect extends Component {
     onClick: PropTypes.func,
     onDoubleClick: PropTypes.func,
     className: PropTypes.string,
-    color: PropTypes.string
+    color: PropTypes.string,
+    childClass: PropTypes.string,
+    bounds: PropTypes.string
   }
 
   static defaultProps = {
@@ -41,8 +45,12 @@ export default class ResizableRect extends Component {
     zoomable: '',
     minWidth: 10,
     minHeight: 10,
+    maxHeight : 300,
+    maxWidth: 300,
     className: '',
-    color: '#333'
+    color: '#333',
+    bounds: '',
+    childClass: ''
   }
 
   handleRotate = ({ angle, startAngle, event }) => {
@@ -67,7 +75,7 @@ export default class ResizableRect extends Component {
 
   handleResize = ({ deltaL, alpha, rect, type, isShiftKey, event }) => {
     if (!this.props.onResize) return
-    const { rotateAngle, aspectRatio, minWidth, minHeight, parentRotateAngle } = this.props
+    const { rotateAngle, aspectRatio, minWidth, minHeight, parentRotateAngle, maxWidth, maxHeight } = this.props
     const beta = alpha - degToRadian(rotateAngle + parentRotateAngle)
     const deltaW = deltaL * Math.cos(beta)
     const deltaH = deltaL * Math.sin(beta)
@@ -75,7 +83,7 @@ export default class ResizableRect extends Component {
     const {
       position: { centerX, centerY },
       size: { width, height }
-    } = getNewStyle(type, { ...rect, rotateAngle }, deltaW, deltaH, ratio, minWidth, minHeight)
+    } = getNewStyle(type, { ...rect, rotateAngle }, deltaW, deltaH, ratio, minWidth, minHeight, maxWidth, maxHeight)
 
     const style = centerToTL({ centerX, centerY, width, height, rotateAngle })
     this.props.onResize({ style, isShiftKey, type, event })
@@ -89,7 +97,7 @@ export default class ResizableRect extends Component {
     const {
       top, left, width, height, rotateAngle, parentRotateAngle, zoomable, rotatable,
       onRotate, onResizeStart, onResizeEnd, onRotateStart, onRotateEnd, onDragStart, onDragEnd,
-      className, onClick, onDoubleClick, color, children
+      className, onClick, onDoubleClick, color, children, childClass, bounds
     } = this.props
 
     const styles = tLToCenter({ top, left, width, height, rotateAngle })
@@ -119,8 +127,12 @@ export default class ResizableRect extends Component {
 
         color={color}
         children={children}
+
+        childClass={childClass}
+        bounds={bounds}
         top={top}
         left={left}
+
       />
     )
   }

@@ -33,7 +33,9 @@ export default class Rect extends PureComponent {
     onClick: PropTypes.func,
     onDoubleClick: PropTypes.func,
     className: PropTypes.string,
-    color: PropTypes.string
+    color: PropTypes.string,
+    childClass: PropTypes.string,
+    bounds: PropTypes.string
   }
 
   setElementRef = (ref) => { this.$element = ref }
@@ -47,12 +49,11 @@ export default class Rect extends PureComponent {
       e.preventDefault()
       if (!this._isMouseDown) return // patch: fix windows press win key during mouseup issue
       e.stopImmediatePropagation()
-      const { top, left } = this.props;
+      const { top, left, childClass, bounds } = this.props;
       const { clientX, clientY } = e.touches ? e.touches[0] : e;
       const distanceX = startX - left;
       const distanceY = startY - top;
-      const [x,y] = getBoundPosition( ".annotatation-wrapper", clientX, clientY, distanceX, distanceY );
-      console.log(x,y, startX, startY)
+      const [x,y] = getBoundPosition( bounds, childClass, clientX, clientY, distanceX, distanceY );
       const deltaX = x - startX
       const deltaY = y - startY
       this.props.onDrag({ deltaX, deltaY, x, y, event: e })

@@ -12,10 +12,15 @@ export const degToRadian = (deg) => deg * Math.PI / 180
 const cos = (deg) => Math.cos(degToRadian(deg))
 const sin = (deg) => Math.sin(degToRadian(deg))
 
-const setWidthAndDeltaW = (width, deltaW, minWidth) => {
+const setWidthAndDeltaW = (width, deltaW, minWidth, maxWidth) => {
   const expectedWidth = width + deltaW
   if (expectedWidth > minWidth) {
-    width = expectedWidth
+    if (expectedWidth > maxWidth) {
+      width = maxWidth
+      deltaW = width - maxWidth
+    } else {
+      width = expectedWidth
+    }
   } else {
     deltaW = minWidth - width
     width = minWidth
@@ -23,10 +28,15 @@ const setWidthAndDeltaW = (width, deltaW, minWidth) => {
   return { width, deltaW }
 }
 
-const setHeightAndDeltaH = (height, deltaH, minHeight) => {
+const setHeightAndDeltaH = (height, deltaH, minHeight, maxHeight) => {
   const expectedHeight = height + deltaH
   if (expectedHeight > minHeight) {
-    height = expectedHeight
+    if (expectedHeight > maxHeight) {
+      height = maxHeight
+      deltaH = height - maxHeight
+    } else {
+      height = expectedHeight
+    }
   } else {
     deltaH = minHeight - height
     height = minHeight
@@ -34,7 +44,7 @@ const setHeightAndDeltaH = (height, deltaH, minHeight) => {
   return { height, deltaH }
 }
 
-export const getNewStyle = (type, rect, deltaW, deltaH, ratio, minWidth, minHeight) => {
+export const getNewStyle = (type, rect, deltaW, deltaH, ratio, minWidth, minHeight, maxWidth, maxHeight) => {
   let { width, height, centerX, centerY, rotateAngle } = rect
   const widthFlag = width < 0 ? -1 : 1
   const heightFlag = height < 0 ? -1 : 1
@@ -42,7 +52,7 @@ export const getNewStyle = (type, rect, deltaW, deltaH, ratio, minWidth, minHeig
   height = Math.abs(height)
   switch (type) {
     case 'r': {
-      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
+      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth, maxWidth)
       width = widthAndDeltaW.width
       deltaW = widthAndDeltaW.deltaW
       if (ratio) {
@@ -60,10 +70,10 @@ export const getNewStyle = (type, rect, deltaW, deltaH, ratio, minWidth, minHeig
     }
     case 'tr': {
       deltaH = -deltaH
-      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
+      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth, maxWidth)
       width = widthAndDeltaW.width
       deltaW = widthAndDeltaW.deltaW
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
+      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight, maxHeight)
       height = heightAndDeltaH.height
       deltaH = heightAndDeltaH.deltaH
       if (ratio) {
@@ -75,10 +85,10 @@ export const getNewStyle = (type, rect, deltaW, deltaH, ratio, minWidth, minHeig
       break
     }
     case 'br': {
-      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
+      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth, maxWidth)
       width = widthAndDeltaW.width
       deltaW = widthAndDeltaW.deltaW
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
+      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight, maxHeight)
       height = heightAndDeltaH.height
       deltaH = heightAndDeltaH.deltaH
       if (ratio) {
@@ -90,7 +100,7 @@ export const getNewStyle = (type, rect, deltaW, deltaH, ratio, minWidth, minHeig
       break
     }
     case 'b': {
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
+      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight, maxHeight)
       height = heightAndDeltaH.height
       deltaH = heightAndDeltaH.deltaH
       if (ratio) {
@@ -108,10 +118,10 @@ export const getNewStyle = (type, rect, deltaW, deltaH, ratio, minWidth, minHeig
     }
     case 'bl': {
       deltaW = -deltaW
-      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
+      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth, maxWidth)
       width = widthAndDeltaW.width
       deltaW = widthAndDeltaW.deltaW
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
+      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight, maxHeight)
       height = heightAndDeltaH.height
       deltaH = heightAndDeltaH.deltaH
       if (ratio) {
@@ -124,7 +134,7 @@ export const getNewStyle = (type, rect, deltaW, deltaH, ratio, minWidth, minHeig
     }
     case 'l': {
       deltaW = -deltaW
-      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
+      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth, maxWidth)
       width = widthAndDeltaW.width
       deltaW = widthAndDeltaW.deltaW
       if (ratio) {
@@ -143,10 +153,10 @@ export const getNewStyle = (type, rect, deltaW, deltaH, ratio, minWidth, minHeig
     case 'tl': {
       deltaW = -deltaW
       deltaH = -deltaH
-      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
+      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth, maxWidth)
       width = widthAndDeltaW.width
       deltaW = widthAndDeltaW.deltaW
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
+      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight, maxHeight)
       height = heightAndDeltaH.height
       deltaH = heightAndDeltaH.deltaH
       if (ratio) {
@@ -159,7 +169,7 @@ export const getNewStyle = (type, rect, deltaW, deltaH, ratio, minWidth, minHeig
     }
     case 't': {
       deltaH = -deltaH
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
+      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight, maxHeight)
       height = heightAndDeltaH.height
       deltaH = heightAndDeltaH.deltaH
       if (ratio) {
@@ -220,86 +230,78 @@ export const tLToCenter = ({ top, left, width, height, rotateAngle }) => ({
   }
 })
 
-export function isNum (num)  {
-  return typeof num === 'number' && !isNaN(num);
+export function isNum (num) {
+  return typeof num === 'number' && !isNaN(num)
 }
 
 export function int (a) {
-  return parseInt(a, 10);
+  return parseInt(a, 10)
 }
 export function outerHeight (node) {
   // This is deliberately excluding margin for our calculations, since we are using
   // offsetTop which is including margin. See getBoundPosition
-  let height = node.clientHeight;
-  const computedStyle = node.ownerDocument.defaultView.getComputedStyle(node);
-  height += int(computedStyle.borderTopWidth);
-  height += int(computedStyle.borderBottomWidth);
-  return height;
+  let height = node.clientHeight
+  const computedStyle = node.ownerDocument.defaultView.getComputedStyle(node)
+  height += int(computedStyle.borderTopWidth)
+  height += int(computedStyle.borderBottomWidth)
+  return height
 }
 
-export function outerWidth (node ) {
+export function outerWidth (node) {
   // This is deliberately excluding margin for our calculations, since we are using
   // offsetLeft which is including margin. See getBoundPosition
-  let width = node.clientWidth;
-  const computedStyle = node.ownerDocument.defaultView.getComputedStyle(node);
-  width += int(computedStyle.borderLeftWidth);
-  width += int(computedStyle.borderRightWidth);
-  return width;
+  let width = node.clientWidth
+  const computedStyle = node.ownerDocument.defaultView.getComputedStyle(node)
+  width += int(computedStyle.borderLeftWidth)
+  width += int(computedStyle.borderRightWidth)
+  return width
 }
-export function innerHeight (node ) {
-  let height = node.clientHeight;
-  const computedStyle = node.ownerDocument.defaultView.getComputedStyle(node);
-  height -= int(computedStyle.paddingTop);
-  height -= int(computedStyle.paddingBottom);
-  return height;
+export function innerHeight (node) {
+  let height = node.clientHeight
+  const computedStyle = node.ownerDocument.defaultView.getComputedStyle(node)
+  height -= int(computedStyle.paddingTop)
+  height -= int(computedStyle.paddingBottom)
+  return height
 }
 
-export function innerWidth (node ) {
-  let width = node.clientWidth;
-  const computedStyle = node.ownerDocument.defaultView.getComputedStyle(node);
-  width -= int(computedStyle.paddingLeft);
-  width -= int(computedStyle.paddingRight);
-  return width;
+export function innerWidth (node) {
+  let width = node.clientWidth
+  const computedStyle = node.ownerDocument.defaultView.getComputedStyle(node)
+  width -= int(computedStyle.paddingLeft)
+  width -= int(computedStyle.paddingRight)
+  return width
 }
-export const getBoundPosition = ( bounds, x, y, distanceX, distanceY) => {
+export const getBoundPosition = (bounds, childClass, x, y, distanceX, distanceY) => {
   // If no bounds, short-circuit and move on
   if (!bounds) return [x, y]
 
-  bounds = typeof bounds === 'string' ? bounds : bounds;
-  const node = document.querySelector('.single-resizer');
+  bounds = typeof bounds === 'string' ? bounds : bounds
+  const node = document.querySelector(childClass)
   if (typeof bounds === 'string') {
-    const { ownerDocument } = node;
-    const ownerWindow = ownerDocument.defaultView;
-    let boundNode;
+    const { ownerDocument } = node
+    let boundNode
     if (bounds === 'parent') {
-      boundNode = node.parentNode;
+      boundNode = node.parentNode
     } else {
-      boundNode = ownerDocument.querySelector(bounds);
+      boundNode = ownerDocument.querySelector(bounds)
     }
-    if (!(boundNode instanceof ownerWindow.HTMLElement)) {
-      throw new Error('Bounds selector "' + bounds + '" could not find an element.');
-    }
-    const boundNodeEl = boundNode; // for Flow, can't seem to refine correctly
-    const nodeStyle = ownerWindow.getComputedStyle(node);
-    const boundNodeStyle = ownerWindow.getComputedStyle(boundNodeEl);
+    const boundRect = boundNode.getBoundingClientRect()
     // Compute bounds. This is a pain with padding and offsets but this gets it exactly right.
     bounds = {
-      left: boundNodeEl.offsetLeft + int(boundNodeStyle.paddingLeft) + int(nodeStyle.marginLeft),
-      top: boundNodeEl.offsetTop + int(boundNodeStyle.paddingTop) + int(nodeStyle.marginTop),
-      right: innerWidth(boundNodeEl) - outerWidth(node)  +
-        int(boundNodeStyle.paddingRight) - int(nodeStyle.marginRight),
-      bottom: innerHeight(boundNodeEl) + boundNodeEl.offsetTop - outerHeight(node)  +
-        int(boundNodeStyle.paddingBottom) - int(nodeStyle.marginBottom)
-    };
+      left: boundRect.left,
+      top: boundRect.top,
+      right: boundRect.width + boundRect.left - outerWidth(node),
+      bottom: boundRect.height + boundRect.top - outerHeight(node)
+    }
   }
 
   // Keep x and y below right and bottom limits...
-  if (isNum(bounds.right)) x = Math.min(x, bounds.right+ distanceX);
-  if (isNum(bounds.bottom)) y = Math.min(y, bounds.bottom + distanceY);
+  if (isNum(bounds.right)) x = Math.min(x, bounds.right + distanceX)
+  if (isNum(bounds.bottom)) y = Math.min(y, bounds.bottom + distanceY)
 
   // But above left and top limits.
-  if (isNum(bounds.left)) x = Math.max(x, bounds.left+ distanceX);
-  if (isNum(bounds.top)) y = Math.max(y, bounds.top+ distanceY);
+  if (isNum(bounds.left)) x = Math.max(x, bounds.left + distanceX)
+  if (isNum(bounds.top)) y = Math.max(y, bounds.top + distanceY)
 
-  return [x, y];
+  return [x, y]
 }
