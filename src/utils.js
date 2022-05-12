@@ -271,7 +271,7 @@ export function innerWidth (node) {
   width -= int(computedStyle.paddingRight)
   return width
 }
-export const getBoundPosition = (bounds, childClass, x, y, distanceX, distanceY) => {
+export const getBoundPosition = (bounds, childClass, x, y, distanceX, distanceY, rotateAngle) => {
   // If no bounds, short-circuit and move on
   if (!bounds) return [x, y]
 
@@ -286,12 +286,14 @@ export const getBoundPosition = (bounds, childClass, x, y, distanceX, distanceY)
       boundNode = ownerDocument.querySelector(bounds)
     }
     const boundRect = boundNode.getBoundingClientRect()
+    const rotationStep = Math.abs(rotateAngle / 45)
+    const isSwap = (rotationStep >= 1 && rotationStep < 3) || (rotationStep >= 5 && rotationStep < 7)
     // Compute bounds. This is a pain with padding and offsets but this gets it exactly right.
     bounds = {
       left: boundRect.left,
       top: boundRect.top,
-      right: boundRect.width + boundRect.left - outerWidth(node),
-      bottom: boundRect.height + boundRect.top - outerHeight(node)
+      right: boundRect.width + boundRect.left - (isSwap ? outerHeight(node) : outerWidth(node)),
+      bottom: boundRect.height + boundRect.top - (isSwap ? outerWidth(node) : outerHeight(node))
     }
   }
 

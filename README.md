@@ -1,6 +1,6 @@
-# react-resizable-rotatable-draggable-touch-v2
+# react-resize-drag-rotate
 
-[![NPM](https://img.shields.io/npm/v/react-resizable-rotatable-draggable-touch-v2.svg)](https://www.npmjs.com/package/react-resizable-rotatable-draggable-touch-v2) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/react-resize-drag-rotate.svg)](https://www.npmjs.com/package/react-resize-drag-rotate) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 A react widget that can be dragged, resized and rotated via a handler.
 
@@ -9,7 +9,7 @@ This is a fork of [react-resizable-rotatable-draggable-touch](https://www.npmjs.
 ### Installation
 
 ```bash
-npm install --save react-resizable-rotatable-draggable-touch-v2`
+npm install --save react-resize-drag-rotate`
 ```
 
 Then you will need to install peer dependency
@@ -22,7 +22,7 @@ npm install --save styled-components
 
 ```jsx
 import React, { Component } from 'react'
-import ResizableRect from 'react-resizable-rotatable-draggable-touch-v2'
+import ResizableRect from 'react-resize-drag-rotate'
 
 class App extends Component {
   constructor() {

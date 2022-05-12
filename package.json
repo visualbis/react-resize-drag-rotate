@@ -1,10 +1,10 @@
 {
-  "name": "react-resizable-rotatable-draggable-touch-v2",
-  "version": "2.0.2",
+  "name": "react-resize-drag-rotate",
+  "version": "0.0.2",
   "description": "A rectangle react component which can be resized and rotated. Works on touch",
-  "author": "vlad-x",
+  "author": "raghu3130",
   "license": "MIT",
-  "repository": "github:vlad-x/react-resizable-rotatable-draggable",
+  "repository": "github:Raghu3130/react-resize-drag-rotate",
   "keywords": [
     "react",
     "rectangle",

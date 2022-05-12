@@ -35,7 +35,8 @@ export default class ResizableRect extends Component {
     className: PropTypes.string,
     color: PropTypes.string,
     childClass: PropTypes.string,
-    bounds: PropTypes.string
+    bounds: PropTypes.string,
+    getNearestToTopBottom: PropTypes.func
   }
 
   static defaultProps = {
@@ -45,7 +46,7 @@ export default class ResizableRect extends Component {
     zoomable: '',
     minWidth: 10,
     minHeight: 10,
-    maxHeight : 300,
+    maxHeight: 300,
     maxWidth: 300,
     className: '',
     color: '#333',
@@ -97,7 +98,7 @@ export default class ResizableRect extends Component {
     const {
       top, left, width, height, rotateAngle, parentRotateAngle, zoomable, rotatable,
       onRotate, onResizeStart, onResizeEnd, onRotateStart, onRotateEnd, onDragStart, onDragEnd,
-      className, onClick, onDoubleClick, color, children, childClass, bounds
+      className, onClick, onDoubleClick, color, children, childClass, bounds, getNearestToTopBottom
     } = this.props
 
     const styles = tLToCenter({ top, left, width, height, rotateAngle })
@@ -132,7 +133,7 @@ export default class ResizableRect extends Component {
         bounds={bounds}
         top={top}
         left={left}
-
+        getNearestToTopBottom={getNearestToTopBottom}
       />
     )
   }

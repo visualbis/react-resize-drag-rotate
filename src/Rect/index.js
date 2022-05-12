@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
-import ReactDom from 'react-dom'
 import { getLength, getAngle, getCursor, getBoundPosition } from '../utils'
 import StyledRect from './StyledRect'
 
@@ -35,7 +34,10 @@ export default class Rect extends PureComponent {
     className: PropTypes.string,
     color: PropTypes.string,
     childClass: PropTypes.string,
-    bounds: PropTypes.string
+    bounds: PropTypes.string,
+    top: PropTypes.number,
+    left: PropTypes.number,
+    getNearestToTopBottom: PropTypes.func
   }
 
   setElementRef = (ref) => { this.$element = ref }
@@ -49,11 +51,16 @@ export default class Rect extends PureComponent {
       e.preventDefault()
       if (!this._isMouseDown) return // patch: fix windows press win key during mouseup issue
       e.stopImmediatePropagation()
-      const { top, left, childClass, bounds } = this.props;
-      const { clientX, clientY } = e.touches ? e.touches[0] : e;
-      const distanceX = startX - left;
-      const distanceY = startY - top;
-      const [x,y] = getBoundPosition( bounds, childClass, clientX, clientY, distanceX, distanceY );
+      let { top, left, childClass, bounds, styles: { size: { width, height }, transform: { rotateAngle } }, getNearestToTopBottom } = this.props
+      const { clientX, clientY } = e.touches ? e.touches[0] : e
+      const nearestValue = getNearestToTopBottom ? getNearestToTopBottom({ startX: left, startY: top, size: [height, width] }, rotateAngle) : null
+      if (nearestValue) {
+        top = nearestValue.top
+        left = nearestValue.left
+      }
+      const distanceX = startX - left
+      const distanceY = startY - top
+      const [x, y] = getBoundPosition(bounds, childClass, clientX, clientY, distanceX, distanceY, rotateAngle)
       const deltaX = x - startX
       const deltaY = y - startY
       this.props.onDrag({ deltaX, deltaY, x, y, event: e })
