@@ -84,6 +84,7 @@ export default class Rect extends PureComponent {
 
   // Rotate
   startRotate = (e) => {
+    document.body.setAttribute('style', 'cursor: url("https://c1-powerpoint-15.cdn.office.net:443/pods/s/161540240522_PptResources/2057/m2/rotatehandlecursor.cur"), default !important')
     if (e.button !== 0 && !e.touches) return
     const { clientX, clientY } = e.touches ? e.touches[0] : e
     const { styles: { transform: { rotateAngle: startAngle } } } = this.props
@@ -100,6 +101,7 @@ export default class Rect extends PureComponent {
     this._isMouseDown = true
     const onMove = (e) => {
       if (!this._isMouseDown) return // patch: fix windows press win key during mouseup issue
+   
       e.stopImmediatePropagation()
       const { clientX, clientY } = e.touches ? e.touches[0] : e
       const rotateVector = {
@@ -110,6 +112,7 @@ export default class Rect extends PureComponent {
       this.props.onRotate({ angle, startAngle, event: e })
     }
     const onUp = (e) => {
+      document.body.style.cursor = 'auto'
       document.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseup', onUp)
       document.removeEventListener('touchmove', onMove)
@@ -202,12 +205,8 @@ export default class Rect extends PureComponent {
         {
           rotatable &&
           <div className="rotate" onMouseDown={this.startRotate} onTouchStart={this.startRotate}>
-            <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M10.536 3.464A5 5 0 1 0 11 10l1.424 1.425a7 7 0 1 1-.475-9.374L13.659.34A.2.2 0 0 1 14 .483V5.5a.5.5 0 0 1-.5.5H8.483a.2.2 0 0 1-.142-.341l2.195-2.195z"
-                fill={color}
-                fillRule="nonzero"
-              />
+            <svg viewBox="0 0 2048 2048" height="24" width="24" >
+              <path d="M 1019 1579 q -115 0 -216 -43 q -101 -44 -176 -119 q -76 -76 -119 -177 q -44 -101 -44 -216 q 0 -115 44 -216 q 43 -101 119 -176 q 75 -76 176 -119 q 101 -44 216 -44 q 114 0 215 44 q 101 43 177 119 q 75 75 119 176 q 43 101 43 216 q -1 6 -1 11 v 16 l 78 -78 l 106 107 l -311 311 l -311 -311 l 107 -107 l 148 148 q 7 -28 11 -51 q 3 -24 3 -46 q 0 -79 -30 -149 q -31 -70 -83 -122 q -52 -53 -122 -83 q -70 -30 -149 -30 q -80 0 -149 30 q -70 30 -122 83 q -53 52 -83 122 q -30 70 -30 149 q 0 80 30 150 q 30 69 83 122 q 52 52 122 82 q 69 30 149 30 q 26 -1 53 -4 q 26 -3 52 -11 l 25 -8 l 129 130 l -60 24 q -50 20 -99 30 q -50 10 -100 10 z" className="SVGShapeRotateHandle" />
             </svg>
           </div>
         }
