@@ -40,10 +40,23 @@ export default class Rect extends PureComponent {
     getNearestToTopBottom: PropTypes.func
   }
 
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      unMount: false
+    }
+  }
+
+  componentWillUnmount () {
+    this.setState({ unMount: true })
+  }
+
   setElementRef = (ref) => { this.$element = ref }
 
   // Drag
   startDrag = (e) => {
+    const { unMount } = this.state
     let { clientX: startX, clientY: startY } = e.touches ? e.touches[0] : e
     this.props.onDragStart && this.props.onDragStart(e)
     this._isMouseDown = true
@@ -63,7 +76,7 @@ export default class Rect extends PureComponent {
       const [x, y] = getBoundPosition(bounds, childClass, clientX, clientY, distanceX, distanceY, rotateAngle)
       const deltaX = x - startX
       const deltaY = y - startY
-      this.props.onDrag({ deltaX, deltaY, x, y, event: e })
+      !unMount && this.props.onDrag({ deltaX, deltaY, x, y, event: e })
       startX = x
       startY = y
     }
@@ -74,7 +87,7 @@ export default class Rect extends PureComponent {
       document.removeEventListener('touchend', onUp)
       if (!this._isMouseDown) return
       this._isMouseDown = false
-      this.props.onDragEnd && this.props.onDragEnd(e)
+      if (!unMount && this.props.onDragEnd) this.props.onDragEnd(e)
     }
     document.addEventListener('mousemove', onMove)
     document.addEventListener('mouseup', onUp)
@@ -84,7 +97,7 @@ export default class Rect extends PureComponent {
 
   // Rotate
   startRotate = (e) => {
-    document.body.setAttribute('style', 'cursor: url("https://c1-powerpoint-15.cdn.office.net:443/pods/s/161540240522_PptResources/2057/m2/rotatehandlecursor.cur"), default !important')
+    document.body.setAttribute('style', 'cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAACBjSFJN AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElN RQfmBxoGNC7iPLteAAAAk0lEQVRIx+2TwQ6AIAxDO+L///LzgIYp4MCYeKHHhZZu3aSvATDzPtUl 04xEahVnJOxqvxSQ2aQAeEax8CyU7nTc/6bYxG0Gni4hjsZCgfx/Jp70MQ9bNRST4Ow7DqMRI5QY YwetRbLRCDsCUXAdgNDlDurKwBD9Eo/Z6G7iUQvb6d5CjjCeRvXAtfBmlAsLC79hBy1XOhMuG4vE AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIyLTA3LTI2VDA2OjUyOjQ2KzAwOjAw3YJFeAAAACV0RVh0 ZGF0ZTptb2RpZnkAMjAyMi0wNy0yNlQwNjo1Mjo0NiswMDowMKzf/cQAAAAASUVORK5CYII="), default !important')
     if (e.button !== 0 && !e.touches) return
     const { clientX, clientY } = e.touches ? e.touches[0] : e
     const { styles: { transform: { rotateAngle: startAngle } } } = this.props
