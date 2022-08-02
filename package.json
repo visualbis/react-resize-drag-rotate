@@ -1,6 +1,6 @@
 {
   "name": "react-resize-drag-rotate",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A rectangle react component which can be resized and rotated. Works on touch",
   "author": "raghu3130",
   "license": "MIT",
