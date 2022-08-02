@@ -98,6 +98,8 @@ export default class ResizableRect extends Component {
     const {
       top, left, width, height, rotateAngle, parentRotateAngle, zoomable, rotatable,
       onRotate, onResizeStart, onResizeEnd, onRotateStart, onRotateEnd, onDragStart, onDragEnd,
+      isDraggable,
+      onDrag,
       className, onClick, onDoubleClick, color, children, childClass, bounds, getNearestToTopBottom
     } = this.props
 
@@ -109,6 +111,7 @@ export default class ResizableRect extends Component {
         styles={styles}
         zoomable={zoomable}
         rotatable={Boolean(rotatable && onRotate)}
+        isDraggable={Boolean(isDraggable && onDrag)}
         parentRotateAngle={parentRotateAngle}
 
         onResizeStart={onResizeStart}

@@ -19,6 +19,7 @@ export default class Rect extends PureComponent {
     styles: PropTypes.object,
     zoomable: PropTypes.string,
     rotatable: PropTypes.bool,
+    isDraggable: PropTypes.bool,
     onResizeStart: PropTypes.func,
     onResize: PropTypes.func,
     onResizeEnd: PropTypes.func,
@@ -56,6 +57,8 @@ export default class Rect extends PureComponent {
 
   // Drag
   startDrag = (e) => {
+    const { isDraggable } = this.props;
+    if(!isDraggable)  return ;
     const { unMount } = this.state
     let { clientX: startX, clientY: startY } = e.touches ? e.touches[0] : e
     this.props.onDragStart && this.props.onDragStart(e)
@@ -192,7 +195,8 @@ export default class Rect extends PureComponent {
       onDoubleClick,
       className,
       color,
-      children
+      children,
+      isDraggable
     } = this.props
     const style = {
       width: Math.abs(width),
@@ -209,7 +213,7 @@ export default class Rect extends PureComponent {
         ref={this.setElementRef}
         onMouseDown={this.startDrag}
         onTouchStart={this.startDrag}
-        className={`rect single-resizer ${className || ''}`}
+        className={`rect ${isDraggable ? "single-resizer" : "" } ${className || ''}`}
         style={style}
         onClick={onClick}
         onDoubleClick={onDoubleClick}
